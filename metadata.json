@@ -1,0 +1,6 @@
+{
+  "name": "Echo Drafts",
+  "description": "Bedside voice recordings untangled into structured facts, feelings, and next steps with real-time speech capture and Gemini intelligence.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

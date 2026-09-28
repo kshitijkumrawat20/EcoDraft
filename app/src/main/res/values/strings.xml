@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Echo Drafts</string>
+    <string name="headline_quote">Your quiet thoughts, untangled.</string>
+    <string name="headline_sub">Bedside recordings transcribed into clear prose.</string>
+    <string name="weekly_patterns_title">Weekly Patterns</string>
+    <string name="recurring_themes_count">%1$d recurring themes noted this week</string>
+    <string name="voice_entries_used">%1$d of %2$d voice entries used this week</string>
+    <string name="listening_status">Listening to your thoughts…</string>
+    <string name="tap_to_finish">Tap to finish when you\'re done</string>
+    <string name="tap_to_organize">Tap to finish &amp; organize</string>
+    <string name="discard_draft">Discard draft</string>
+    <string name="transcribing_realtime">transcribing in real time</string>
+    <string name="category_facts">Facts</string>
+    <string name="category_feelings">Feelings</string>
+    <string name="category_next_steps">Next Steps</string>
+    <string name="raw_voice_transcript">Raw voice transcript (%1$d seconds)</string>
+    <string name="delete_entry">Delete entry</string>
+    <string name="share_insight">Share insight</string>
+    <string name="bedside_synthesis">Bedside Synthesis</string>
+    <string name="temporal_tension">Temporal Tension</string>
+    <string name="recurring_feelings">Recurring Feelings</string>
+    <string name="recurring_facts">Recurring Facts &amp; Topics</string>
+    <string name="most_effective_steps">Most Effective Next Steps</string>
+    <string name="save_report_notebook">Save report to notebook</string>
+    <string name="done_action">Done</string>
+    <string name="nav_drafts">Drafts</string>
+    <string name="nav_capture">Capture</string>
+    <string name="nav_reflect">Reflect</string>
+    <string name="nav_settings">Settings</string>
+</resources>

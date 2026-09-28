@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Centered within 66dp safe zone (21dp to 87dp) -->
+    <!-- Soft outer halo ring -->
+    <path
+        android:strokeColor="#33FFD07B"
+        android:strokeWidth="1.5"
+        android:pathData="M54,54m-28,0a28,28 0 1,0 56,0a28,28 0 1,0 -56,0" />
+
+    <!-- Waveform audio bars + notebook lines representing voice notes -->
+    <!-- Bar 1 -->
+    <path
+        android:pathData="M37,49 L37,59"
+        android:strokeColor="#7CE8B34A"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round" />
+    <!-- Bar 2 -->
+    <path
+        android:pathData="M42,43 L42,65"
+        android:strokeColor="#B0E8B34A"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round" />
+    <!-- Bar 3 -->
+    <path
+        android:pathData="M47,38 L47,70"
+        android:strokeColor="#FFD07B"
+        android:strokeWidth="3"
+        android:strokeLineCap="round" />
+    <!-- Center Quill / Peak Voice Bar -->
+    <path
+        android:pathData="M54,33 L54,75"
+        android:strokeColor="#FFE1A8"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round" />
+    <!-- Bar 5 -->
+    <path
+        android:pathData="M61,38 L61,70"
+        android:strokeColor="#FFD07B"
+        android:strokeWidth="3"
+        android:strokeLineCap="round" />
+    <!-- Bar 6 -->
+    <path
+        android:pathData="M66,43 L66,65"
+        android:strokeColor="#B0E8B34A"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round" />
+    <!-- Bar 7 -->
+    <path
+        android:pathData="M71,49 L71,59"
+        android:strokeColor="#7CE8B34A"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round" />
+
+    <!-- Subtle bedside amber dot -->
+    <path
+        android:fillColor="#FFD07B"
+        android:pathData="M54,26m-2.5,0a2.5,2.5 0 1,0 5,0a2.5,2.5 0 1,0 -5,0" />
+</vector>
