@@ -98,7 +98,7 @@ dependencies {
   implementation(libs.moshi.kotlin)
   implementation(libs.okhttp)
   implementation(libs.purchases)
-  implementation(libs.purchases.ui.compose)
+  implementation(libs.purchases.ui)
   // implementation(libs.play.services.location)
   implementation(libs.retrofit)
   testImplementation(libs.androidx.compose.ui.test.junit4)

@@ -382,17 +382,17 @@ fun TimelineScreen(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = "Your notebook is clear.",
+                                text = "Nothing here yet.",
                                 fontFamily = Newsreader,
                                 fontStyle = FontStyle.Italic,
-                                fontSize = 20.sp,
+                                fontSize = 22.sp,
                                 color = EchoOnSurfaceVariant
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = "Tap the amber mic below to record your bedside thoughts.",
+                                text = "Say what's on your mind.",
                                 fontFamily = PublicSans,
-                                fontSize = 13.sp,
+                                fontSize = 14.sp,
                                 color = EchoSecondary
                             )
                         }

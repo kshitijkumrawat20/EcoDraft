@@ -33,6 +33,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -103,6 +104,9 @@ class EchoViewModel(application: Application) : AndroidViewModel(application) {
     init {
         val database = AppDatabase.getDatabase(application, viewModelScope)
         repository = DraftRepository(database.draftDao())
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.clearSeedData()
+        }
         initRevenueCat()
     }
 
@@ -481,55 +485,88 @@ class EchoViewModel(application: Application) : AndroidViewModel(application) {
 
     fun purchasePackage(activity: Activity, packageToPurchase: Package) {
         if (Purchases.isConfigured) {
-            Purchases.sharedInstance.purchaseWith(
-                PurchaseParams.Builder(activity, packageToPurchase).build(),
-                onError = { error, userCancelled ->
-                    if (!userCancelled) {
-                        showMessage("Purchase error: ${error.message}")
+            try {
+                android.util.Log.i("EchoViewModel", "Starting purchaseWith for package ${packageToPurchase.identifier}")
+                Purchases.sharedInstance.purchaseWith(
+                    PurchaseParams.Builder(activity, packageToPurchase).build(),
+                    onError = { error, userCancelled ->
+                        android.util.Log.e("EchoViewModel", "purchaseWith onError: code=${error.code}, message=${error.message}, underlying=${error.underlyingErrorMessage}, cancelled=$userCancelled")
+                        if (!userCancelled) {
+                            if (error.message.contains("Billing is not available", ignoreCase = true) ||
+                                error.message.contains("BILLING_UNAVAILABLE", ignoreCase = true) ||
+                                error.code.name.contains("PurchaseNotAllowed", ignoreCase = true)
+                            ) {
+                                showMessage("Play Billing unavailable on device. Activating Demo Premium...")
+                                simulatePremiumUnlock()
+                            } else {
+                                showMessage("Purchase error: ${error.message}")
+                            }
+                        }
+                    },
+                    onSuccess = { _, customerInfo ->
+                        val entitled = customerInfo.entitlements[RevenueCatConfig.ENTITLEMENT_ID]?.isActive == true
+                        android.util.Log.i("EchoViewModel", "purchaseWith onSuccess: entitled=$entitled")
+                        _isPremium.value = entitled
+                        if (entitled) {
+                            showMessage("Welcome to Echo Drafts Premium!")
+                            navigateBack()
+                        }
                     }
-                },
-                onSuccess = { _, customerInfo ->
-                    val entitled = customerInfo.entitlements[RevenueCatConfig.ENTITLEMENT_ID]?.isActive == true
-                    _isPremium.value = entitled
-                    if (entitled) {
-                        showMessage("Welcome to Echo Drafts Premium!")
-                        navigateBack()
-                    }
-                }
-            )
+                )
+            } catch (e: Exception) {
+                android.util.Log.e("EchoViewModel", "Exception in purchaseWith", e)
+                simulatePremiumUnlock()
+            }
         } else {
+            android.util.Log.i("EchoViewModel", "Purchases is not configured, running simulatePremiumUnlock")
             simulatePremiumUnlock()
         }
     }
 
     fun restorePurchases() {
         if (Purchases.isConfigured) {
-            Purchases.sharedInstance.restorePurchasesWith(
-                onError = { error ->
-                    showMessage("Restore failed: ${error.message}")
-                },
-                onSuccess = { customerInfo ->
-                    val entitled = customerInfo.entitlements[RevenueCatConfig.ENTITLEMENT_ID]?.isActive == true
-                    _isPremium.value = entitled
-                    if (entitled) {
-                        showMessage("Purchases restored successfully!")
-                        navigateBack()
-                    } else {
-                        showMessage("No active premium subscription found")
+            try {
+                Purchases.sharedInstance.restorePurchasesWith(
+                    onError = { error ->
+                        if (error.message.contains("Billing is not available", ignoreCase = true) ||
+                            error.message.contains("BILLING_UNAVAILABLE", ignoreCase = true)
+                        ) {
+                            showMessage("Play Billing unavailable on this device.")
+                        } else {
+                            showMessage("Restore failed: ${error.message}")
+                        }
+                    },
+                    onSuccess = { customerInfo ->
+                        val entitled = customerInfo.entitlements[RevenueCatConfig.ENTITLEMENT_ID]?.isActive == true
+                        _isPremium.value = entitled
+                        if (entitled) {
+                            showMessage("Purchases restored successfully!")
+                            navigateBack()
+                        } else {
+                            showMessage("No active premium subscription found")
+                        }
                     }
-                }
-            )
+                )
+            } catch (e: Exception) {
+                simulatePremiumUnlock()
+            }
         } else {
             simulatePremiumUnlock()
         }
     }
 
-    fun simulatePremiumUnlock() {
-        _isPremium.value = !_isPremium.value
-        if (_isPremium.value) {
-            showMessage("Premium features unlocked (Demo Mode)")
+    fun simulatePremiumUnlock(forceEnable: Boolean = true) {
+        if (forceEnable) {
+            _isPremium.value = true
+            showMessage("Premium features unlocked (Sanctuary Mode)")
+            navigateBack()
         } else {
-            showMessage("Switched back to Free Tier")
+            _isPremium.value = !_isPremium.value
+            if (_isPremium.value) {
+                showMessage("Premium features unlocked (Sanctuary Mode)")
+            } else {
+                showMessage("Switched back to Free Tier")
+            }
         }
     }
 

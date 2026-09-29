@@ -26,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AutoStories
 import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.Insights
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.CircularProgressIndicator
@@ -81,26 +82,6 @@ fun WeeklyPatternsScreen(
 
     val report by viewModel.latestWeeklyPattern.collectAsStateWithLifecycle()
     val isGenerating by viewModel.isGeneratingWeeklyPatterns.collectAsStateWithLifecycle()
-
-    val pattern = report ?: WeeklyPatternReport(
-        dateRangeText = "Oct 16 – Oct 22",
-        synthesisQuote = "“You recorded 6 drafts this week. Your racing thoughts peaked on Tuesday evening around deadlines, with relief following each action step.”",
-        synthesisDescription = "Quietly distilled from your late-night voice reflections and untangled midnight notes.",
-        peakDayTime = "Peak: Tue 23:40",
-        dailyTensionLevels = listOf(0.3f, 0.95f, 0.5f, 0.4f, 0.65f, 0.2f, 0.4f),
-        recurringFeelings = listOf(
-            com.example.data.model.PatternItem("Overwhelmed before starting", "4 entries"),
-            com.example.data.model.PatternItem("Late-night restlessness", "3 entries"),
-            com.example.data.model.PatternItem("Relief after writing it down", "3 entries")
-        ),
-        recurringFacts = listOf(
-            com.example.data.model.PatternItem("Midterm & assignment submissions", "3 times"),
-            com.example.data.model.PatternItem("Sleep schedule shifts", "2 times"),
-            com.example.data.model.PatternItem("Living expenses & rent", "2 times")
-        ),
-        effectiveNextSteps = "Small tangible actions that calmed racing loops: reading drafts aloud, scheduling specific 15-minute review windows.",
-        editorialNote = "\"Your narrative cadence slows down notably once thoughts are anchored onto paper. The urgency dissolved after Tuesday's 3-minute voice stream.\""
-    )
 
     val scrollState = rememberScrollState()
 
@@ -177,28 +158,65 @@ fun WeeklyPatternsScreen(
                 }
             }
 
-            // Date Range
-            Text(
-                text = pattern.dateRangeText,
-                fontFamily = PublicSans,
-                fontSize = 13.sp,
-                color = EchoSecondary,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 14.dp)
-            )
+            val currentReport = report
+            if (currentReport == null) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(vertical = 48.dp, horizontal = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Insights,
+                        contentDescription = null,
+                        tint = EchoPrimary,
+                        modifier = Modifier.size(44.dp)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "No patterns recorded yet.",
+                        fontFamily = Newsreader,
+                        fontStyle = FontStyle.Italic,
+                        fontSize = 22.sp,
+                        color = EchoOnSurface,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Record your late-night thoughts this week. Once you have entries, tap refresh above to synthesize recurring themes, tensions, and next steps.",
+                        fontFamily = PublicSans,
+                        fontSize = 13.sp,
+                        color = EchoSecondary,
+                        textAlign = TextAlign.Center,
+                        lineHeight = 20.sp
+                    )
+                }
+            } else {
+                val pattern = currentReport
+                // Date Range
+                Text(
+                    text = pattern.dateRangeText,
+                    fontFamily = PublicSans,
+                    fontSize = 13.sp,
+                    color = EchoSecondary,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 14.dp)
+                )
 
-            HorizontalDivider(color = EchoOutlineVariant.copy(alpha = 0.2f), thickness = 0.8.dp)
+                HorizontalDivider(color = EchoOutlineVariant.copy(alpha = 0.2f), thickness = 0.8.dp)
 
-            // Scrollable Content
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(scrollState)
-                    .padding(vertical = 20.dp),
-                verticalArrangement = Arrangement.spacedBy(22.dp)
-            ) {
+                // Scrollable Content
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .verticalScroll(scrollState)
+                        .padding(vertical = 20.dp),
+                    verticalArrangement = Arrangement.spacedBy(22.dp)
+                ) {
                 // Editorial Synthesis / Narrative Overview
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(
@@ -601,4 +619,5 @@ fun WeeklyPatternsScreen(
             }
         }
     }
+}
 }

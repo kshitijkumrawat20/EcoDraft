@@ -100,15 +100,22 @@ fun PaywallScreen(
     // Fetch RevenueCat offerings dynamically
     LaunchedEffect(Unit) {
         if (Purchases.isConfigured) {
-            Purchases.sharedInstance.getOfferingsWith(
-                onError = {
-                    isLoadingOffering = false
-                },
-                onSuccess = { offerings ->
-                    currentOfferingPackage = offerings.current?.availablePackages?.firstOrNull()
-                    isLoadingOffering = false
-                }
-            )
+            try {
+                Purchases.sharedInstance.getOfferingsWith(
+                    onError = { error ->
+                        android.util.Log.e("PaywallScreen", "Error fetching offerings: code=${error.code}, message=${error.message}, underlying=${error.underlyingErrorMessage}")
+                        isLoadingOffering = false
+                    },
+                    onSuccess = { offerings ->
+                        android.util.Log.i("PaywallScreen", "Fetched offerings successfully: current=${offerings.current?.identifier}, packagesCount=${offerings.current?.availablePackages?.size}")
+                        currentOfferingPackage = offerings.current?.availablePackages?.firstOrNull()
+                        isLoadingOffering = false
+                    }
+                )
+            } catch (e: Exception) {
+                android.util.Log.e("PaywallScreen", "Exception in getOfferingsWith", e)
+                isLoadingOffering = false
+            }
         } else {
             isLoadingOffering = false
         }
