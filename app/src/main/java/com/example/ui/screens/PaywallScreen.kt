@@ -345,9 +345,18 @@ fun PaywallScreen(
                 ) {
                     Button(
                         onClick = {
+                            android.util.Log.i(
+                                "PaywallScreen",
+                                "Free Trial button tapped. activity=${activity != null}, currentOfferingPackage=${currentOfferingPackage?.identifier}, Purchases.isConfigured=${Purchases.isConfigured}"
+                            )
                             if (activity != null && currentOfferingPackage != null) {
-                                viewModel.purchasePackage(activity, currentOfferingPackage!!)
+                                android.util.Log.i("PaywallScreen", "Branch (b): Calling viewModel.purchasePackage()")
+                                viewModel.purchasePackage(activity, currentOfferingPackage)
                             } else {
+                                android.util.Log.w(
+                                    "PaywallScreen",
+                                    "Branch (a): Hit 'else' fallback because activity=${activity != null}, currentOfferingPackage=${currentOfferingPackage?.identifier}"
+                                )
                                 viewModel.showMessage("Simulating RevenueCat purchase...")
                                 viewModel.simulatePremiumUnlock()
                             }

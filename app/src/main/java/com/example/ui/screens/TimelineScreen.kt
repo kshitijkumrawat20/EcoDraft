@@ -109,6 +109,8 @@ fun TimelineScreen(
     val isSearchActive by viewModel.isSearchActive.collectAsStateWithLifecycle()
     val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
     val searchResults by viewModel.searchResults.collectAsStateWithLifecycle()
+    val isPremium by viewModel.isPremium.collectAsStateWithLifecycle()
+    val latestWeeklyPattern by viewModel.latestWeeklyPattern.collectAsStateWithLifecycle()
     val displayedEntries = if (isSearchActive && searchQuery.isNotBlank()) searchResults else drafts
 
     // Pulse animation for mic button
@@ -336,16 +338,26 @@ fun TimelineScreen(
                                             fontWeight = FontWeight.Normal,
                                             color = EchoOnSurface
                                         )
-                                        Icon(
-                                            imageVector = Icons.Default.Lock,
-                                            contentDescription = "Lock",
-                                            tint = EchoSecondary,
-                                            modifier = Modifier.size(13.dp)
-                                        )
+                                        if (!isPremium) {
+                                            Icon(
+                                                imageVector = Icons.Default.Lock,
+                                                contentDescription = "Lock",
+                                                tint = EchoSecondary,
+                                                modifier = Modifier.size(13.dp)
+                                            )
+                                        }
                                     }
                                     Spacer(modifier = Modifier.height(2.dp))
+                                    val patternSubtitle = when {
+                                        latestWeeklyPattern != null -> {
+                                            val count = latestWeeklyPattern!!.recurringFeelings.size + latestWeeklyPattern!!.recurringFacts.size
+                                            stringResource(R.string.recurring_themes_count, count)
+                                        }
+                                        !isPremium -> "Tap to unlock weekly synthesis"
+                                        else -> "Record thoughts to reveal patterns"
+                                    }
                                     Text(
-                                        text = stringResource(R.string.recurring_themes_count, 4),
+                                        text = patternSubtitle,
                                         fontFamily = PublicSans,
                                         fontSize = 13.sp,
                                         color = EchoSecondary

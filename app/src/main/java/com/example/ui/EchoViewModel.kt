@@ -102,11 +102,8 @@ class EchoViewModel(application: Application) : AndroidViewModel(application) {
     val isManualEntryMode: StateFlow<Boolean> = _isManualEntryMode.asStateFlow()
 
     init {
-        val database = AppDatabase.getDatabase(application, viewModelScope)
+        val database = AppDatabase.getDatabase(application)
         repository = DraftRepository(database.draftDao())
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.clearSeedData()
-        }
         initRevenueCat()
     }
 
@@ -483,8 +480,10 @@ class EchoViewModel(application: Application) : AndroidViewModel(application) {
 
     // --- RevenueCat Actions & Demo Fallbacks ---
 
-    fun purchasePackage(activity: Activity, packageToPurchase: Package) {
-        if (Purchases.isConfigured) {
+    fun purchasePackage(activity: Activity, packageToPurchase: Package?) {
+        val pkgDesc = if (packageToPurchase != null) packageToPurchase.identifier else "null"
+        android.util.Log.i("EchoViewModel", "purchasePackage called: Purchases.isConfigured=${Purchases.isConfigured}, packageToPurchase=$pkgDesc")
+        if (Purchases.isConfigured && packageToPurchase != null) {
             try {
                 android.util.Log.i("EchoViewModel", "Starting purchaseWith for package ${packageToPurchase.identifier}")
                 Purchases.sharedInstance.purchaseWith(

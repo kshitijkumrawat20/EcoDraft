@@ -7,7 +7,6 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.data.model.DraftEntry
 import com.example.data.model.WeeklyPatternReport
-import kotlinx.coroutines.CoroutineScope
 
 @Database(
     entities = [DraftEntry::class, WeeklyPatternReport::class],
@@ -22,7 +21,7 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
-        fun getDatabase(context: Context, scope: CoroutineScope? = null): AppDatabase {
+        fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,

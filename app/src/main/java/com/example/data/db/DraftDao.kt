@@ -52,9 +52,10 @@ interface DraftDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWeeklyPattern(pattern: WeeklyPatternReport): Long
 
-    @Query("DELETE FROM draft_entries WHERE id <= 4")
-    suspend fun clearSeedDrafts()
+    // Clear all data
+    @Query("DELETE FROM draft_entries")
+    suspend fun deleteAllDrafts()
 
-    @Query("DELETE FROM weekly_pattern_reports WHERE id <= 1")
-    suspend fun clearSeedPatterns()
+    @Query("DELETE FROM weekly_pattern_reports")
+    suspend fun deleteAllWeeklyPatterns()
 }

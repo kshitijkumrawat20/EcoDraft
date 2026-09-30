@@ -21,20 +21,15 @@ class EchoApplication : Application() {
                 Purchases.logLevel = LogLevel.DEBUG
 
                 Log.i("EchoApplication", "Configuring Purchases with key prefix: $keyPrefix")
-                // Configure RevenueCat SDK before any Activity or ViewModel starts
-                Purchases.configure(
-                    PurchasesConfiguration.Builder(this, RevenueCatConfig.REVENUECAT_API_KEY).build()
-                )
+
+                val configuration = PurchasesConfiguration.Builder(this, RevenueCatConfig.REVENUECAT_API_KEY).build()
+                Purchases.configure(configuration)
                 Log.i("EchoApplication", "RevenueCat SDK configured successfully.")
             } catch (e: Exception) {
                 Log.w("EchoApplication", "Could not initialize RevenueCat SDK: ${e.message}")
             }
         } else {
-            if (RevenueCatConfig.REVENUECAT_API_KEY.startsWith("test_")) {
-                Log.w("EchoApplication", "RevenueCat API key starts with 'test_'. Android SDK requires a public Google Play key ('goog_...'). Operating in local sanctuary / demo mode.")
-            } else {
-                Log.i("EchoApplication", "RevenueCat API key not configured or is placeholder. Running in local sanctuary / demo mode.")
-            }
+            Log.i("EchoApplication", "RevenueCat API key not configured or is placeholder. Running in local sanctuary / demo mode.")
         }
     }
 }

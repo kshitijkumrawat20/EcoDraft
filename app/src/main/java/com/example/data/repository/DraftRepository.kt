@@ -36,8 +36,8 @@ class DraftRepository(
         return draftDao.insertWeeklyPattern(pattern)
     }
 
-    suspend fun clearSeedData() {
-        draftDao.clearSeedDrafts()
-        draftDao.clearSeedPatterns()
+    suspend fun clearAllData() {
+        draftDao.deleteAllDrafts()
+        draftDao.deleteAllWeeklyPatterns()
     }
 }

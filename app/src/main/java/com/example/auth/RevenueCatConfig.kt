@@ -28,7 +28,7 @@ object RevenueCatConfig {
             if (key.isBlank()) return false
             if (key.contains("placeholder", ignoreCase = true)) return false
             if (key == "goog_placeholder_api_key") return false
-            if (!key.startsWith("goog_") && !key.startsWith("amzn_")) return false
+            if (!key.startsWith("goog_") && !key.startsWith("amzn_") && !key.startsWith("test_")) return false
             if (key.length < 15) return false
             return true
         }
